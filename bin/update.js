@@ -44,10 +44,15 @@ function walkdir(dir, listFiles = true, listDirs = false, listRootDir = "") {
     return results;
 }
 
-async function autoUpdateFile(file, filepath, url, drmKey, expectedHash = null) {
+async function autoUpdateFile(file, filepath, url, drmKey, expectedHash = null, gitlabToken = null) {
     try {
-        const updatedFile = await request({ url: url, qs: { "drmkey": drmKey }, encoding: null });
-
+        let qs = { "drmKey": drmKey};
+        if(gitlabToken)
+        {
+            qs.private_token = gitlabToken;
+            qs.ref = 'master';
+        }
+        const updatedFile = await request({ url: gitlabToken?(url+'/raw').replace(file, file.replace(/\//gm, '%2F')):url, qs: qs, encoding: null });
         if (expectedHash && expectedHash !== hash(updatedFile))
             throw "ERROR: " + url + "\nDownloaded file doesn't match hash specified in patch manifest! Possible causes:\n   + Incorrect manifest specified by developer\n   + NoPing (if you're using it) has a bug that can fuck up the download";
 
@@ -99,7 +104,7 @@ async function autoUpdateModule(name, root, updateData, updatelog, updatelimit, 
         if (updatelog)
             console.log(mui.get('update/module-download-manifest', { serverIndex }));
 
-        let manifest_result = await autoUpdateFile(manifest_file, manifest_path, manifest_url, updateData["drmKey"], null);
+        let manifest_result = await autoUpdateFile(manifest_file, manifest_path, manifest_url, updateData["drmKey"], null, updateData["gitlabToken"]);
         if (!manifest_result[1])
             throw new Error(`Unable to download update manifest for module "${name}":\n${manifest_result[2]}`);
 
@@ -133,8 +138,7 @@ async function autoUpdateModule(name, root, updateData, updatelog, updatelimit, 
                 const file_url = update_url_root + file;
                 if (updatelog)
                     console.log(mui.get('update/module-download-file', { file }));
-
-                let promise = autoUpdateFile(file, filepath, file_url, updateData.drmKey, manifest.no_hash_verification ? null : expectedHash);
+                let promise = autoUpdateFile(file, filepath, file_url, updateData.drmKey, manifest.no_hash_verification ? null : expectedHash, updateData["gitlabToken"]);
                 promises.push(updatelimit ? (await promise) : promise);
             }
         }
