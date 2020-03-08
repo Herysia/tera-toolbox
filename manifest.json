@@ -27,7 +27,7 @@
     "bin/update-electron-helper.js": "cd1b731f466a78363659ff10d24fe678095839ae7da3494d281aeafe78e7c576",
     "bin/update-electron.js": "157a3b5d71d166cac0463a4878dbc1849b5ebbf9469d9f7790e1d47bafe0c93a",
     "bin/update-self.js": "7f78a96a23d7c308900845fbc2460c1621c550a76493d78995aa4faff349c67d",
-    "bin/update.js": "2a90a0959166023097613d56f6624a1ad2db392ed595be34142d26afa20728fe",
+    "bin/update.js": "bad6957d9e69cbc9e69f307aff1e82cb89c9edb83999c61392531ff0ca8297ea",
     "bin/utils.js": "c82e5478878e79a1d9d4cd2b7cb109edf0e28ab9681a35a17f3fac32df245fcf",
     "bin/gui/icon.ico": "eddf1fe34c998df2b607cd36f69334d9890a7f150917b0aa4d1fb6db891aa5f0",
     "bin/gui/icon_xmas.ico": "b8897291594639f5efc3093e908f55567f0dd26368b8b935b05892947e394a1e",
